@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Cardatrônico</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_splashscree">@string/app_name</string>
+    <string name="nameTest">Eating</string>
+    <string name="hourWork">35-45min</string>
+    <string name="typeFood">Foods</string>
+    <string name="productNameTest">Testing..</string>
+    <string name="descriptionNameTest">O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão usado por estas indústrias desde o ano de 1500, quando uma misturou os caracteres de um texto para criar um espécime de livro.</string>
+</resources>
