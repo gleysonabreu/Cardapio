@@ -55,6 +55,60 @@ class MainActivity : AppCompatActivity() {
         recyclerCardapio.adapter = CardapioAdapter(listaCardapio, this);
         recyclerCardapio.layoutManager = linearLayoutManager;
 
+        search_view.setOnSearchViewListener(object: MaterialSearchView.SearchViewListener{
+            override fun onSearchViewShown() {
+
+            }
+
+            override fun onSearchViewClosed() {
+                returnCardapio();
+            }
+
+        })
+
+        /// Settings Search View
+        search_view.setHint("Pesquisar produtos no cardápio");
+        search_view.setOnQueryTextListener(object: MaterialSearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false;
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                if( newText != null && !newText.isEmpty() ){
+
+                    searchMenu(newText)
+
+                }
+
+                return true;
+
+            }
+
+        })
+
+    }
+
+    private fun returnCardapio(){
+
+        recyclerCardapio.adapter = CardapioAdapter(listaCardapio, this@MainActivity);
+        recyclerCardapio.adapter?.notifyDataSetChanged();
+
+    }
+
+    private fun searchMenu(text: String){
+            var searchMenu: ArrayList<Cardapio> = ArrayList<Cardapio>();
+
+        for(cardapio in listaCardapio){
+            var nameitem = cardapio.nameitem.toLowerCase();
+            if( nameitem.contains( text.toLowerCase() ) ){
+                searchMenu.add(cardapio);
+            }
+        }
+
+        recyclerCardapio.adapter = CardapioAdapter(searchMenu, this@MainActivity);
+        recyclerCardapio.adapter?.notifyDataSetChanged();
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -67,8 +121,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun cardapio(){
 
         childEventListener = cardapioRef.addChildEventListener(object: ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -113,6 +166,14 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        cardapio();
+
     }
 
     override fun onDestroy() {
