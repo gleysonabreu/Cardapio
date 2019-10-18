@@ -3,6 +3,8 @@ package com.gleysonabreu.cardapio.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,26 +16,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.gleysonabreu.cardapio.R
+import com.gleysonabreu.cardapio.adapter.CardapioAdapter
 import com.gleysonabreu.cardapio.adapter.EmpresaAdapter
+import com.gleysonabreu.cardapio.helper.SettingsFirebase
+import com.gleysonabreu.cardapio.model.Cardapio
 import com.gleysonabreu.cardapio.model.Empresa
+import com.google.firebase.database.*
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.empresas_items.*
 import kotlinx.android.synthetic.main.toolbar.*
-
-
-
-
-
-
-
+import kotlinx.android.synthetic.main.toolbar.view.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var lista = ArrayList<Empresa>();
+    private var listaCardapio: ArrayList<Cardapio> = ArrayList<Cardapio>();
     private lateinit var  linearLayoutManager: LinearLayoutManager;
-    private val SCROLL_DIRECTION_UP = -1
+    private lateinit var  childEventListener: ChildEventListener;
+    private lateinit var  firebaseRef: DatabaseReference;
+    private lateinit var  cardapioRef: DatabaseReference;
+    private var listKey: ArrayList<String> = ArrayList();
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,69 +44,79 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         linearLayoutManager = LinearLayoutManager(this);
-        val itemOnClick: (View, Int, Int) -> Unit = {
-          view, position, type -> run {
-            val intent: Intent = Intent(this, CardapioActivity::class.java);
-            intent.putExtra("dadosEmpresa", lista[position]);
-            startActivity(intent);
-            }
-        };
-
-        //Lista Teste empresas
-        val empresa = Empresa();
-        empresa.nome = "China in Box";
-        empresa.tempo = "35-40min";
-        empresa.tipo = "Lanche";
-        empresa.foto = "n";
-        lista.add(empresa);
-        lista.add(empresa);
-        lista.add(empresa);
-        lista.add(empresa);
-        lista.add(empresa);
-        lista.add(empresa);
-
-        val empresa2 = Empresa();
-        empresa2.nome = "China in Box2";
-        empresa2.tempo = "35-40min";
-        empresa2.tipo = "Lanche";
-        empresa2.foto = "n";
-        lista.add(empresa2);
-        lista.add(empresa2);
-        lista.add(empresa2);
-        lista.add(empresa2);
-        lista.add(empresa2);
-        lista.add(empresa2);
-
-        val empresa3 = Empresa();
-        empresa3.nome = "China in Box3";
-        empresa3.tempo = "35-40min";
-        empresa3.tipo = "Lanche";
-        empresa3.foto = "n";
-        lista.add(empresa3);
-        lista.add(empresa3);
-        lista.add(empresa3);
-        lista.add(empresa3);
-        lista.add(empresa3);
-        lista.add(empresa3);
-
-
-        // Settings Toolbar
+        // Toolbar settings
         setSupportActionBar(toolbar);
 
-        //RecyclerView
-        val emp_recy = recyclerListaEmpresas;
-        emp_recy.adapter = EmpresaAdapter(lista, this, itemOnClick);
-        emp_recy.layoutManager = linearLayoutManager;
+        // FirebaseSettings
+        firebaseRef = SettingsFirebase.getFirebase();
+        cardapioRef = firebaseRef.child("cardapio");
+
+        // Recycler Settings
+        recyclerCardapio.adapter = CardapioAdapter(listaCardapio, this);
+        recyclerCardapio.layoutManager = linearLayoutManager;
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater;
-        inflater.inflate(com.gleysonabreu.cardapio.R.menu.menu_app, menu);
+        inflater.inflate(R.menu.menu_app, menu);
         val item: MenuItem? = menu?.findItem(R.id.search);
         search_view.setMenuItem(item);
 
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        childEventListener = cardapioRef.addChildEventListener(object: ChildEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                Log.e("Cancelled", p0.message);
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                Log.e("Moved", p0.toString());
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+
+                var cardapioChanged = p0.getValue(Cardapio::class.java)
+                var index = listKey.indexOf(p0.key);
+
+                if(cardapioChanged != null){
+                    listaCardapio.set(index, cardapioChanged);
+                    recyclerCardapio.adapter?.notifyDataSetChanged();
+                }
+
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                var cardapio = p0.getValue(Cardapio::class.java);
+                if (cardapio != null) {
+                    listaCardapio.add(cardapio);
+                    p0.key?.let { listKey.add(it) }
+                };
+
+                recyclerCardapio.adapter?.notifyDataSetChanged();
+
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+
+                var index = listKey.indexOf(p0.key);
+                listaCardapio.removeAt(index);
+                listKey.removeAt(index);
+
+                recyclerCardapio.adapter?.notifyDataSetChanged();
+
+            }
+
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cardapioRef.removeEventListener(childEventListener);
     }
 }

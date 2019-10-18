@@ -4,9 +4,12 @@ import java.io.Serializable
 
 class Cardapio : Serializable {
 
-    var nomeProduto: String = "";
-    var descricaoProduto: String = "";
-    var precoProduto: Double = 0.0;
-    var fotoProduto: String = "";
+    var idItemCardapio: String = "";
+    var idCategory: String = "";
+    var nameitem: String = "";
+    var priceitem: Double = 0.0;
+    var descriptionItem: String = "";
+    var discountPorcentItem: Int = 0;
+    var photoItem: String = "";
 
 }
