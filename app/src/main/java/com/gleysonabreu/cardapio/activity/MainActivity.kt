@@ -139,8 +139,8 @@ class MainActivity : AppCompatActivity() {
 
                 if(cardapioChanged != null){
                     listaCardapio.set(index, cardapioChanged);
-                    recyclerCardapio.adapter?.notifyDataSetChanged();
                 }
+                recyclerCardapio.adapter?.notifyDataSetChanged();
 
             }
 
@@ -149,9 +149,9 @@ class MainActivity : AppCompatActivity() {
                 if (cardapio != null) {
                     listaCardapio.add(cardapio);
                     p0.key?.let { listKey.add(it) }
-                };
-
+                }
                 recyclerCardapio.adapter?.notifyDataSetChanged();
+
 
             }
 
@@ -160,7 +160,6 @@ class MainActivity : AppCompatActivity() {
                 var index = listKey.indexOf(p0.key);
                 listaCardapio.removeAt(index);
                 listKey.removeAt(index);
-
                 recyclerCardapio.adapter?.notifyDataSetChanged();
 
             }
@@ -171,7 +170,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
+        listaCardapio.clear();
+        listKey.clear();
         cardapio();
 
     }

@@ -4,10 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorDesignNew</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/sfpror</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,8 +17,8 @@
     </style>
 
     <style name="ThemeSplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorSplash</item>
-        <item name="colorPrimaryDark">@color/colorSplash</item>
+        <item name="colorPrimary">@color/colorDesignNew</item>
+        <item name="colorPrimaryDark">@color/colorDesignNew</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

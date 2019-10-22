@@ -1,6 +1,8 @@
 package com.gleysonabreu.cardapio.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
 import android.view.LayoutInflater
@@ -44,24 +46,20 @@ class CardapioAdapter (private val cardapio: ArrayList<Cardapio>, private val co
             itemView.nomeProdutoCardapio.text = cardapio.nameitem;
             itemView.textCategory.text = Base64Custom.decodificarBase64(cardapio.idCategory);
             itemView.descricaoProdutoCardapio.text = cardapio.descriptionItem;
-            if( cardapio.discountPorcentItem != 0 ){
+            itemView.precoProdutoCardapio.text = "R$ " + cardapio.priceitem.toString();
 
+            if( cardapio.discountPorcentItem > 0 && cardapio.discountPorcentItem <= 99 ){
 
-                if( cardapio.discountPorcentItem >= 100 ){
-                    itemView.textDiscount.text = "100%";
-                    itemView.textPriceWithDiscount.text = "Grátis";
-                }else{
-                    var result = cardapio.priceitem - (( cardapio.discountPorcentItem / 100.0 ) * cardapio.priceitem);
-                    itemView.textDiscount.text = cardapio.discountPorcentItem.toString() + "%";
-                    itemView.textPriceWithDiscount.text = "R$ " + result.toString();
-                }
-                itemView.precoProdutoCardapio.text = "R$ " + cardapio.priceitem.toString();
+                itemView.textPriceWithDiscount.visibility = View.VISIBLE;
                 itemView.precoProdutoCardapio.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG;
+                var result = cardapio.priceitem - (( cardapio.discountPorcentItem / 100.0 ) * cardapio.priceitem);
+                itemView.textPriceWithDiscount.text = "R$ " + result.toString();
 
-
-
+            }else if (cardapio.discountPorcentItem >= 100){
+                itemView.textPriceWithDiscount.visibility = View.VISIBLE;
+                itemView.precoProdutoCardapio.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG;
+                itemView.textPriceWithDiscount.text = "Grátis";
             }else{
-                itemView.textDiscount.visibility = View.GONE;
                 itemView.textPriceWithDiscount.visibility = View.GONE;
                 itemView.precoProdutoCardapio.paintFlags = 0;
             }
