@@ -1,13 +1,20 @@
 package com.gleysonabreu.cardapio.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginTop
 import com.gleysonabreu.cardapio.model.Cardapio
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
@@ -31,6 +38,7 @@ class CardapioAdapter (private val cardapio: ArrayList<Cardapio>, private val co
     }
 
     override fun onBindViewHolder(holder: CardapioViewHolder, position: Int) {
+
         holder.bindItems(cardapio[position], context);
     }
 

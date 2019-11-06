@@ -1,32 +1,30 @@
 package com.gleysonabreu.cardapio.activity
 
-import android.content.Intent
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
-import android.widget.Toolbar
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.gleysonabreu.cardapio.R
 import com.gleysonabreu.cardapio.adapter.CardapioAdapter
-import com.gleysonabreu.cardapio.adapter.EmpresaAdapter
+import com.gleysonabreu.cardapio.helper.HidingScrollListener
 import com.gleysonabreu.cardapio.helper.SettingsFirebase
 import com.gleysonabreu.cardapio.model.Cardapio
-import com.gleysonabreu.cardapio.model.Empresa
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.empresas_items.*
 import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.android.synthetic.main.toolbar.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         // Toolbar settings
         setSupportActionBar(toolbar);
 
+
         // FirebaseSettings
         firebaseRef = SettingsFirebase.getFirebase();
         cardapioRef = firebaseRef.child("cardapio");
@@ -54,6 +53,23 @@ class MainActivity : AppCompatActivity() {
         // Recycler Settings
         recyclerCardapio.adapter = CardapioAdapter(listaCardapio, this);
         recyclerCardapio.layoutManager = linearLayoutManager;
+
+        // Hiding FAB
+        recyclerCardapio.addOnScrollListener(object : HidingScrollListener(){
+            override fun onHide() {
+
+                var lp: CoordinatorLayout.LayoutParams = floatingActionButton.layoutParams as CoordinatorLayout.LayoutParams;
+                var fabBottom = lp.bottomMargin;
+                floatingActionButton.animate().translationY(floatingActionButton.height+fabBottom.toFloat()).setInterpolator(AccelerateInterpolator(2F)).start();
+
+            }
+
+            override fun onShow() {
+                floatingActionButton.animate().translationY(0F).setInterpolator(DecelerateInterpolator(2F)).start();
+            }
+
+        })
+
 
         search_view.setOnSearchViewListener(object: MaterialSearchView.SearchViewListener{
             override fun onSearchViewShown() {
@@ -86,6 +102,15 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+        floatingActionButton.setOnClickListener{
+            var linearLayoutManager2: LinearLayoutManager = recyclerCardapio.layoutManager as LinearLayoutManager;
+            linearLayoutManager2.scrollToPositionWithOffset(0, 0);
+
+
+
+
+        }
 
     }
 
