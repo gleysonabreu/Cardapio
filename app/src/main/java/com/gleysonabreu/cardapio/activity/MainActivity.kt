@@ -106,8 +106,7 @@ class MainActivity : AppCompatActivity() {
         floatingActionButton.setOnClickListener{
             var linearLayoutManager2: LinearLayoutManager = recyclerCardapio.layoutManager as LinearLayoutManager;
             linearLayoutManager2.scrollToPositionWithOffset(0, 0);
-
-
+            mainAppBar.setExpanded(true, true);
 
 
         }
