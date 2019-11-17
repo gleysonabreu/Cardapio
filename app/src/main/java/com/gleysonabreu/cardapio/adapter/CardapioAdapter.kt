@@ -54,14 +54,14 @@ class CardapioAdapter (private val cardapio: ArrayList<Cardapio>, private val co
             itemView.nomeProdutoCardapio.text = cardapio.nameitem;
             itemView.textCategory.text = Base64Custom.decodificarBase64(cardapio.idCategory);
             itemView.descricaoProdutoCardapio.text = cardapio.descriptionItem;
-            itemView.precoProdutoCardapio.text = "R$ " + cardapio.priceitem.toString();
+            itemView.precoProdutoCardapio.text = "R$ " + (String.format("%.2f", cardapio.priceitem).toString());
 
             if( cardapio.discountPorcentItem > 0 && cardapio.discountPorcentItem <= 99 ){
 
                 itemView.textPriceWithDiscount.visibility = View.VISIBLE;
                 itemView.precoProdutoCardapio.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG;
                 var result = cardapio.priceitem - (( cardapio.discountPorcentItem / 100.0 ) * cardapio.priceitem);
-                itemView.textPriceWithDiscount.text = "R$ " + result.toString();
+                itemView.textPriceWithDiscount.text = "R$ " + (String.format("%.2f", result).toString());
 
             }else if (cardapio.discountPorcentItem >= 100){
                 itemView.textPriceWithDiscount.visibility = View.VISIBLE;

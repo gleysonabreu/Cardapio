@@ -57,7 +57,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nomeRestaurante"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/sfpds"
@@ -66,14 +66,14 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/enderecoRestaurante"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="R. Vicente Linhares, 500 - Aldeota, Fortaleza - CE"
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/numeroRestaurante"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="(85)997507271"

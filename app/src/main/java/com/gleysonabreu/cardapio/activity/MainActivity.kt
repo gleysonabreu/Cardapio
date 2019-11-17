@@ -19,6 +19,7 @@ import com.gleysonabreu.cardapio.adapter.CardapioAdapter
 import com.gleysonabreu.cardapio.helper.HidingScrollListener
 import com.gleysonabreu.cardapio.helper.SettingsFirebase
 import com.gleysonabreu.cardapio.model.Cardapio
+import com.gleysonabreu.cardapio.model.Empresa
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  firebaseRef: DatabaseReference;
     private lateinit var  cardapioRef: DatabaseReference;
     private var listKey: ArrayList<String> = ArrayList();
+    private lateinit var childeventListenerCompany: ChildEventListener;
+
+
+    private lateinit var  companyRef: DatabaseReference;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         // FirebaseSettings
         firebaseRef = SettingsFirebase.getFirebase();
         cardapioRef = firebaseRef.child("cardapio");
+        companyRef = firebaseRef.child("empresas");
 
         // Recycler Settings
         recyclerCardapio.adapter = CardapioAdapter(listaCardapio, this);
@@ -145,6 +151,54 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+
+    private fun returnDataCompany(){
+
+        childeventListenerCompany = companyRef.addChildEventListener(object: ChildEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+
+                var companyChanged = p0.getValue(Empresa::class.java)
+
+                if(companyChanged != null){
+
+                    nomeRestaurante.text = companyChanged.nomeEmpresa;
+                    enderecoRestaurante.text = companyChanged.complemento + ", " + companyChanged.bairro + ", " + companyChanged.cidade + ", " + companyChanged.estado;
+                    numeroRestaurante.text = companyChanged.telefone;
+
+                }
+
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+
+                var companyChanged = p0.getValue(Empresa::class.java)
+
+                if(companyChanged != null){
+
+                    nomeRestaurante.text = companyChanged.nomeEmpresa;
+                    enderecoRestaurante.text = companyChanged.complemento + ", " + companyChanged.bairro + ", " + companyChanged.cidade + ", " + companyChanged.estado;
+                    numeroRestaurante.text = companyChanged.telefone;
+
+                }
+
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+            }
+
+
+        });
+
+    }
+
+
     private fun cardapio(){
 
         childEventListener = cardapioRef.addChildEventListener(object: ChildEventListener{
@@ -197,11 +251,13 @@ class MainActivity : AppCompatActivity() {
         listaCardapio.clear();
         listKey.clear();
         cardapio();
+        returnDataCompany();
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cardapioRef.removeEventListener(childEventListener);
+        companyRef.removeEventListener(childeventListenerCompany);
     }
 }
