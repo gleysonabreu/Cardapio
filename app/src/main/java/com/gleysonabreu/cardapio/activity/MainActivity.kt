@@ -2,6 +2,7 @@ package com.gleysonabreu.cardapio.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gleysonabreu.cardapio.R
 import com.gleysonabreu.cardapio.adapter.CardapioAdapter
 import com.gleysonabreu.cardapio.helper.HidingScrollListener
@@ -25,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.cardapio_items.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
@@ -171,6 +174,10 @@ class MainActivity : AppCompatActivity() {
                     nomeRestaurante.text = companyChanged.nomeEmpresa;
                     enderecoRestaurante.text = companyChanged.complemento + ", " + companyChanged.bairro + ", " + companyChanged.cidade + ", " + companyChanged.estado;
                     numeroRestaurante.text = companyChanged.telefone;
+
+                    var url: Uri = Uri.parse(companyChanged.photoLink);
+                    Glide.with(this@MainActivity).load(url).into(imageRestaurante);
+
 
                 }
 

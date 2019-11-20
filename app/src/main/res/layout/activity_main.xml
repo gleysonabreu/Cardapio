@@ -40,7 +40,8 @@
         android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <include
+
+        <include
         android:id="@+id/include"
         app:layout_scrollFlags="scroll|snap"
         layout="@layout/toolbar"
@@ -48,37 +49,46 @@
         android:layout_height="?attr/actionBarSize"
         />
 
-    <LinearLayout
-        android:id="@+id/layoutInfo"
-        app:layout_scrollFlags="scroll|enterAlways"
-        android:padding="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imageRestaurante"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_scrollFlags="scroll|snap"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/a" />
 
-        <TextView
-            android:id="@+id/nomeRestaurante"
+        <LinearLayout
+            android:id="@+id/layoutInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/sfpds"
-            android:text="Rabbit Family Café e Restaurante"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:src="@drawable/a"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-        <TextView
-            android:id="@+id/enderecoRestaurante"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="R. Vicente Linhares, 500 - Aldeota, Fortaleza - CE"
-            android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/nomeRestaurante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sfpds"
+                android:text="Rabbit Family Café e Restaurante"
+                android:textColor="@color/textColor"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/numeroRestaurante"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="(85)997507271"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/enderecoRestaurante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="R. Vicente Linhares, 500 - Aldeota, Fortaleza - CE"
+                android:textColor="@color/textColor" />
+
+            <TextView
+                android:id="@+id/numeroRestaurante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(85)997507271"
+                android:textColor="@color/textColor" />
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
